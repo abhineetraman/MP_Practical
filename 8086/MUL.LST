@@ -1,0 +1,158 @@
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:28:15
+                                                             Page     1-1
+
+
+				.MODEL SMALL 
+				.386 
+ 0050				.STACK 50H 
+ 0000				.DATA 
+ 0000  0A 45 6E 74 65 72 20	  d1 db 0AH,'Enter Ist number : ',24H 
+       49 73 74 20 6E 75 6D	
+       62 65 72 20 3A 20 24	
+ 0015  0A 45 6E 74 65 72 20	  d2 db 0AH,'Enter 2nd number : ',24H 
+       32 6E 64 20 6E 75 6D	
+       62 65 72 20 3A 20 24	
+ 002A  0A 4D 75 6C 74 69 70	  d3 db 0AH,'Multiplication of the two numbers 
+				is : ',24H 
+       6C 69 63 61 74 69 6F	
+       6E 20 6F 66 20 74 68	
+       65 20 74 77 6F 20 6E	
+       75 6D 62 65 72 73 20	
+       69 73 20 3A 20 24	
+ 0000				.CODE 
+ 0000				START: 
+ 0000  B8 ---- R		      MOV AX,@DATA 
+ 0003  8E D8			      MOV DS,AX 
+ 0005  BA 0000 R		      MOV DX,offset d1 
+ 0008  B4 09			      MOV AH,09H 
+ 000A  CD 21			      INT 21H 
+ 000C  E8 003D R		      CALL Input 
+ 000F  66| 8B EB		      MOV EBP,EBX 
+ 0012  BA 0015 R		      MOV DX,offset d2 
+ 0015  B4 09			      MOV AH,09H 
+ 0017  CD 21			      INT 21H 
+ 0019  E8 003D R		      CALL Input 
+ 001C  66| 8B C3		      MOV EAX,EBX 
+ 001F  66| F7 E5		      MUL EBP 
+ 0022  66| 8B DA		      MOV EBX,EDX 
+ 0025  66| 50			      PUSH EAX 
+ 0027  BA 002A R		      MOV DX,offset d3 
+ 002A  B4 09			      MOV AH,09H 
+ 002C  CD 21			      INT 21H 
+ 002E  E8 0075 R		      CALL Output 
+ 0031  66| 58			      POP EAX 
+ 0033  66| 8B D8		      MOV EBX,EAX 
+ 0036  E8 0075 R		      CALL output 
+ 0039  B4 4C			      MOV AH,4CH 
+ 003B  CD 21			      INT 21H 
+				 
+ 003D				Input PROC NEAR 
+ 003D  66| BB 00000000		      MOV EBX,00000000H 
+ 0043  66| BA 00000000		      MOV EDX,00000000H 
+ 0049  B1 1C			      MOV CL,1CH 
+ 004B  B5 08			      MOV CH,08H 
+ 004D				      L1: 
+ 004D  B4 01			         MOV AH,01H 
+ 004F  CD 21			         INT 21H 
+ 0051  3C 39			         CMP AL,39H 
+ 0053  0F 86 005C R		         JBE L2 
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:28:15
+                                                             Page     1-2
+
+
+ 0057  2C 37			         SUB AL,37H 
+ 0059  EB 03 90			         JMP L3 
+ 005C				      L2: 
+ 005C  2C 30			         SUB AL,30H 
+ 005E				      L3: 
+ 005E  8A D0			         MOV DL,AL 
+ 0060  66| D3 E2		         SHL EDX,CL 
+ 0063  66| 03 DA		         ADD EBX,EDX 
+ 0066  66| BA 00000000		         MOV EDX,00000000H 
+ 006C  80 E9 04			         SUB CL,04H 
+ 006F  80 ED 01			         SUB CH,01H 
+ 0072  75 D9			         JNZ L1 
+ 0074  C3			      RET 
+ 0075				      Input ENDP 
+				 
+ 0075				Output PROC NEAR 
+ 0075  0F 83 007F R		      JNC L4 
+ 0079  B2 31			      MOV DL,31H 
+ 007B  B4 02			      MOV AH,02H 
+ 007D  CD 21			      INT 21H 
+ 007F				      L4: 
+ 007F  66| BD F0000000		         MOV EBP,0F0000000H 
+ 0085  B1 1C			         MOV CL,1CH 
+ 0087  B5 08			         MOV CH,08H 
+ 0089				      L5: 
+ 0089  66| 8B D3		         MOV EDX,EBX 
+ 008C  66| 23 D5		         AND EDX,EBP 
+ 008F  66| D3 EA		         SHR EDX,CL 
+ 0092  80 FA 09			         CMP DL,09H 
+ 0095  0F 86 009F R		         JBE L6 
+ 0099  80 C2 37			         ADD DL,37H 
+ 009C  EB 04 90			         JMP L7 
+ 009F				      L6: 
+ 009F  80 C2 30			         ADD DL,30H 
+ 00A2				      L7: 
+ 00A2  B4 02			         MOV AH,02H 
+ 00A4  CD 21			         INT 21H 
+ 00A6  8A C1			         MOV AL,CL 
+ 00A8  B1 04			         MOV CL,04H 
+ 00AA  66| D3 ED		         SHR EBP,CL 
+ 00AD  8A C8			         MOV CL,AL 
+ 00AF  80 E9 04			         SUB CL,04H 
+ 00B2  80 ED 01			         SUB CH,01H 
+ 00B5  75 D2			         JNZ L5 
+ 00B7  C3			      RET 
+ 00B8				      Output ENDP 
+ 00B8				end START 
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:28:15
+                                                             Symbols-1
+
+
+
+
+                N a m e         	Size	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	16 Bit	0053	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	16 Bit	0050	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	16 Bit	00B8	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+D1 . . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+D2 . . . . . . . . . . . . . . .  	L BYTE	0015	_DATA
+D3 . . . . . . . . . . . . . . .  	L BYTE	002A	_DATA
+
+INPUT  . . . . . . . . . . . . .  	N PROC	003D	_TEXT	Length = 0038
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	004D	_TEXT
+L2 . . . . . . . . . . . . . . .  	L NEAR	005C	_TEXT
+L3 . . . . . . . . . . . . . . .  	L NEAR	005E	_TEXT
+L4 . . . . . . . . . . . . . . .  	L NEAR	007F	_TEXT
+L5 . . . . . . . . . . . . . . .  	L NEAR	0089	_TEXT
+L6 . . . . . . . . . . . . . . .  	L NEAR	009F	_TEXT
+L7 . . . . . . . . . . . . . . .  	L NEAR	00A2	_TEXT
+
+OUTPUT . . . . . . . . . . . . .  	N PROC	0075	_TEXT	Length = 0043
+
+START  . . . . . . . . . . . . .  	L NEAR	0000	_TEXT
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  MUL		
+
+
+     91 Source  Lines
+     91 Total   Lines
+     27 Symbols
+
+  51144 + 465400 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -1,0 +1,184 @@
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:04:47
+                                                             Page     1-1
+
+
+				.model small 
+				.386 
+ 0050				.stack 50H 
+ 0000				.data 
+				 
+ 0000  0A 45 6E 74 65 72 20	d1 db 0AH,'Enter first Number : ',24H 
+       66 69 72 73 74 20 4E	
+       75 6D 62 65 72 20 3A	
+       20 24			
+ 0017  0A 45 6E 74 65 72 20	d2 db 0AH,'Enter second number : ',24H 
+       73 65 63 6F 6E 64 20	
+       6E 75 6D 62 65 72 20	
+       3A 20 24			
+ 002F  0A 44 69 66 66 65 72	d3 db 0AH,'Difference of both numbers : ',24H 
+       65 6E 63 65 20 6F 66	
+       20 62 6F 74 68 20 6E	
+       75 6D 62 65 72 73 20	
+       3A 20 24			
+				 
+ 0000				.code 
+ 0000				start: 
+ 0000  B8 ---- R		      mov ax,@data 
+ 0003  8E D8			      mov ds,ax 
+				 
+ 0005  BA 0000 R		      mov dx,offset d1 
+ 0008  B4 09			      mov ah,09H 
+ 000A  CD 21			      INT 21H 
+				 
+ 000C  E8 0043 R		call input 
+				 
+ 000F  66| 8B EB		      mov ebp,ebx 
+ 0012  BA 0017 R		      mov dx,offset d2 
+ 0015  B4 09			      mov ah,09H 
+ 0017  CD 21			      int 21h 
+				 
+ 0019  E8 0043 R		call input 
+				 
+ 001C  BA 002F R		      mov dx,offset d3 
+ 001F  B4 09			      mov ah,09H 
+ 0021  CD 21			      int 21h 
+ 0023  66| 3B EB		      cmp ebp,ebx 
+ 0026  0F 83 0036 R		      jae L1 
+ 002A  B2 2D			      mov dl,2dh 
+ 002C  B4 02			      mov ah,02h 
+ 002E  CD 21			      int 21h 
+ 0030  66| F7 DD		      neg ebp 
+ 0033  66| F7 DB		      neg ebx 
+				 
+ 0036				      L1: 
+ 0036  66| 2B EB		         sub ebp,ebx 
+				 
+ 0039  66| 8B DD		         mov ebx,ebp 
+				 
+ 003C  E8 007B R		call output 
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:04:47
+                                                             Page     1-2
+
+
+				 
+ 003F  B4 4C			      mov ah,4ch 
+ 0041  CD 21			      int 21h 
+				 
+ 0043				input proc near 
+				 
+ 0043  66| BB 00000000		        mov ebx,00000000H 
+ 0049  66| BA 00000000		        mov edx,00000000H 
+ 004F  B1 1C			        mov cl,1ch 
+ 0051  B5 08			        mov ch,08h 
+				 
+ 0053				        L3: 
+ 0053  B4 01			           mov ah,01h 
+				 
+ 0055  CD 21			           int 21h 
+ 0057  3C 39			           cmp al,39h 
+ 0059  0F 86 0062 R		           jbe L4 
+ 005D  2C 37			           sub al,37h 
+ 005F  EB 03 90			           jmp L5 
+				 
+ 0062				        L4: 
+ 0062  2C 30			           sub al,30h 
+				 
+ 0064				        L5: 
+ 0064  8A D0			           mov dl,al 
+				 
+ 0066  66| D3 E2		           shl edx,cl 
+ 0069  66| 03 DA		           add ebx,edx 
+ 006C  66| BA 00000000		           mov edx,00000000H 
+ 0072  80 E9 04			           sub cl,04h 
+ 0075  80 ED 01			           sub ch,01h 
+ 0078  75 D9			          jnz L3 
+ 007A  C3			          ret 
+				 
+ 007B				input endp 
+				 
+ 007B				output proc near 
+ 007B  66| BD F0000000		          mov ebp,0F0000000H 
+ 0081  B1 1C			          mov cl,1ch 
+ 0083  B5 08			          mov ch,08h 
+				 
+ 0085				          L6: 
+ 0085  66| 8B D3		              mov edx,ebx 
+				 
+ 0088  66| 23 D5		              and edx,ebp 
+ 008B  66| D3 EA		              shr edx,cl 
+ 008E  80 FA 09			              cmp dl,09h 
+ 0091  0F 86 009B R		             jbe L7 
+ 0095  80 C2 37			             add dl,37h 
+ 0098  EB 04 90			             jmp L8 
+				 
+ 009B				          L7: 
+ 009B  80 C2 30			              add dl,30h 
+ 009E				          L8: 
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:04:47
+                                                             Page     1-3
+
+
+ 009E  B4 02			              mov ah,02h 
+				               
+ 00A0  CD 21			              int 21h 
+ 00A2  8A C1			              mov al,cl 
+ 00A4  B1 04			              mov cl,04h 
+ 00A6  66| D3 ED		              shr ebp,cl 
+ 00A9  8A C8			              mov cl,al 
+ 00AB  80 E9 04			              sub cl,04h 
+ 00AE  80 ED 01			              sub ch,01h 
+ 00B1  75 D2			              jnz L6 
+ 00B3  C3			              ret 
+				 
+ 00B4				output endp 
+				 
+ 00B4				end start 
+Microsoft (R) Macro Assembler Version 5.00                  11/2/22 21:04:47
+                                                             Symbols-1
+
+
+
+
+                N a m e         	Size	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	16 Bit	004E	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	16 Bit	0050	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	16 Bit	00B4	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+D1 . . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+D2 . . . . . . . . . . . . . . .  	L BYTE	0017	_DATA
+D3 . . . . . . . . . . . . . . .  	L BYTE	002F	_DATA
+
+INPUT  . . . . . . . . . . . . .  	N PROC	0043	_TEXT	Length = 0038
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	0036	_TEXT
+L3 . . . . . . . . . . . . . . .  	L NEAR	0053	_TEXT
+L4 . . . . . . . . . . . . . . .  	L NEAR	0062	_TEXT
+L5 . . . . . . . . . . . . . . .  	L NEAR	0064	_TEXT
+L6 . . . . . . . . . . . . . . .  	L NEAR	0085	_TEXT
+L7 . . . . . . . . . . . . . . .  	L NEAR	009B	_TEXT
+L8 . . . . . . . . . . . . . . .  	L NEAR	009E	_TEXT
+
+OUTPUT . . . . . . . . . . . . .  	N PROC	007B	_TEXT	Length = 0039
+
+START  . . . . . . . . . . . . .  	L NEAR	0000	_TEXT
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  SUB		
+
+
+    113 Source  Lines
+    113 Total   Lines
+     27 Symbols
+
+  51144 + 465400 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
